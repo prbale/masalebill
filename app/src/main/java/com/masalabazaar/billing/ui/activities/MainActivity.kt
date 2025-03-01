@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.masalabazaar.billing.R
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         generatePdfButton.setOnClickListener {
             val pdfGenerator = PDFGenerator(this)
-            pdfGenerator.generatePDF(items, totalAmountText.text.toString())
+            val file: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString())
+            file?.let { it1 -> PrintHelper(this).printPDF(it1) }
         }
     }
 
