@@ -1,4 +1,6 @@
 package com.masalabazaar.billing.ui.activities.database
+
+
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -9,30 +11,16 @@ import com.masalabazaar.billing.ui.activities.data.ReportItem
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
-    companion object {
-        private const val DATABASE_NAME = "MasalaBilling.db"
-        private const val DATABASE_VERSION = 1
-        private const val TAG = "DatabaseHelper"
-    }
-
     override fun onCreate(db: SQLiteDatabase) {
-        try {
-            db.execSQL("CREATE TABLE report (id INTEGER PRIMARY KEY AUTOINCREMENT, filename TEXT, customer TEXT, amount TEXT, dateTime TEXT)")
-            db.execSQL("CREATE TABLE items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, ratePerKg REAL)")
-            seedDatabase(db)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error creating tables", e)
-        }
+        db.execSQL("CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, ratePerKg REAL)")
+        db.execSQL("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, filename TEXT, customer TEXT, amount TEXT, dateTime TEXT)")
+        Log.d("DatabaseHelper", "Tables created: items, reports")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        try {
-            db.execSQL("DROP TABLE IF EXISTS report")
-            db.execSQL("DROP TABLE IF EXISTS items")
-            onCreate(db)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error upgrading database", e)
-        }
+        db.execSQL("DROP TABLE IF EXISTS items")
+        db.execSQL("DROP TABLE IF EXISTS reports")
+        onCreate(db)
     }
 
     fun saveItems(items: List<BillItem>) {
@@ -46,24 +34,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             }
             db.insert("items", null, values)
         }
-
         db.close()
-    }
-
-
-    private fun seedDatabase(db: SQLiteDatabase) {
-        val items = listOf(
-            Pair("Turmeric", 200.0),
-            Pair("Red Chilli", 300.0),
-            Pair("Coriander", 250.0)
-        )
-        for (item in items) {
-            val values = ContentValues().apply {
-                put("name", item.first)
-                put("ratePerKg", item.second)
-            }
-            db.insert("items", null, values)
-        }
     }
 
     fun getItems(): List<BillItem> {
@@ -82,31 +53,26 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     fun saveReport(filename: String, customer: String, amount: String) {
         val db = writableDatabase
-        try {
-            val values = ContentValues().apply {
-                put("filename", filename)
-                put("customer", customer)
-                put("amount", amount)
-                put("dateTime", System.currentTimeMillis().toString())  // Store timestamp
-            }
-            val rowId = db.insert("report", null, values)
-            if (rowId == -1L) {
-                Log.e(TAG, "Error inserting report")
-            } else {
-                Log.d(TAG, "Report inserted successfully with rowId: $rowId")
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error saving report", e)
-        } finally {
-            db.close()
+        val values = ContentValues().apply {
+            put("filename", filename)
+            put("customer", customer)
+            put("amount", amount)
+            put("dateTime", System.currentTimeMillis().toString())
         }
+        val result = db.insert("reports", null, values)
+        if (result == -1L) {
+            Log.e("DatabaseHelper", "Error inserting into reports table")
+        } else {
+            Log.d("DatabaseHelper", "Report saved successfully: $filename")
+        }
+        db.close()
     }
 
     fun getSavedReports(): List<ReportItem> {
         val db = readableDatabase
         val reports = mutableListOf<ReportItem>()
-        val cursor = db.rawQuery("SELECT filename, customer, amount, dateTime FROM report", null)
         try {
+            val cursor = db.rawQuery("SELECT filename, customer, amount, dateTime FROM reports", null)
             while (cursor.moveToNext()) {
                 reports.add(
                     ReportItem(
@@ -117,12 +83,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                     )
                 )
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error retrieving reports", e)
-        } finally {
             cursor.close()
-            db.close()
+        } catch (e: android.database.sqlite.SQLiteException) {
+            e.printStackTrace()
+            Log.e("DatabaseHelper", "Error reading reports table: ${e.message}")
+            onCreate(db) // Recreate the table if it doesn’t exist
         }
         return reports
+    }
+
+    companion object {
+        private const val DATABASE_NAME = "MasalaBilling.db"
+        private const val DATABASE_VERSION = 2
     }
 }
