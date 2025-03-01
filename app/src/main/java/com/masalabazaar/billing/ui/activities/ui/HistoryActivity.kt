@@ -3,12 +3,12 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.masalabazaar.billing.R
+import com.masalabazaar.billing.ui.activities.adapter.HistoryAdapter
 import com.masalabazaar.billing.ui.activities.data.ReportItem
 import com.masalabazaar.billing.ui.activities.database.DatabaseHelper
 import com.masalabazaar.billing.ui.activities.pdf.PrintHelper
@@ -16,14 +16,16 @@ import java.io.File
 
 class HistoryActivity : AppCompatActivity() {
 
-    private lateinit var historyListView: ListView
+    private lateinit var historyRecyclerView: RecyclerView
     private lateinit var reports: List<ReportItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
-        historyListView = findViewById(R.id.historyListView)
+        historyRecyclerView = findViewById(R.id.historyRecyclerView)
+        historyRecyclerView.layoutManager = LinearLayoutManager(this)
+
         loadHistory()
     }
 
@@ -31,13 +33,10 @@ class HistoryActivity : AppCompatActivity() {
         val dbHelper = DatabaseHelper(this)
         reports = dbHelper.getSavedReports()
 
-        val reportList = reports.map { "${it.customerName} | ${it.dateTime} | ₹${it.amount}" }
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, reportList)
-        historyListView.adapter = adapter
-
-        historyListView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            showOptionsDialog(reports[position])
+        val adapter = HistoryAdapter(this, reports) { report ->
+            showOptionsDialog(report)
         }
+        historyRecyclerView.adapter = adapter
     }
 
     private fun showOptionsDialog(reportItem: ReportItem) {
