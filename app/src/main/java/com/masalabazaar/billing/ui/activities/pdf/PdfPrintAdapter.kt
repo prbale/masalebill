@@ -1,4 +1,4 @@
-package com.masalabazaar.billing.ui.activities
+package com.masalabazaar.billing.ui.activities.pdf
 
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor

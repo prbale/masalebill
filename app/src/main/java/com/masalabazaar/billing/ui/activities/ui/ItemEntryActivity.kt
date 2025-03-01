@@ -1,10 +1,12 @@
-package com.masalabazaar.billing.ui.activities
+package com.masalabazaar.billing.ui.activities.ui
 
 import android.app.Activity
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.masalabazaar.billing.R
+import com.masalabazaar.billing.ui.activities.data.BillItem
+import com.masalabazaar.billing.ui.activities.database.DatabaseHelper
 
 class ItemEntryActivity : AppCompatActivity() {
 

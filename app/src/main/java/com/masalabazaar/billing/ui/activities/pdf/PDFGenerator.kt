@@ -1,10 +1,10 @@
-package com.masalabazaar.billing.ui.activities
+package com.masalabazaar.billing.ui.activities.pdf
 
 import android.content.Context
 import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
-import com.masalabazaar.billing.ui.activities.BillItem
+import com.masalabazaar.billing.ui.activities.data.BillItem
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

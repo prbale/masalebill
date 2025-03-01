@@ -1,4 +1,4 @@
-package com.masalabazaar.billing.ui.activities
+package com.masalabazaar.billing.ui.activities.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.core.widget.addTextChangedListener
 import com.masalabazaar.billing.R
+import com.masalabazaar.billing.ui.activities.data.BillItem
 
 class BillAdapter(private val items: MutableList<BillItem>, private val updateTotal: () -> Unit) :
     RecyclerView.Adapter<BillAdapter.ViewHolder>() {

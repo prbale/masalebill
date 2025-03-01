@@ -1,17 +1,23 @@
-package com.masalabazaar.billing.ui.activities
+package com.masalabazaar.billing.ui.activities.ui
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.masalabazaar.billing.R
+import com.masalabazaar.billing.ui.activities.adapter.BillAdapter
+import com.masalabazaar.billing.ui.activities.data.BillItem
+import com.masalabazaar.billing.ui.activities.pdf.PDFGenerator
+import com.masalabazaar.billing.ui.activities.pdf.PrintHelper
+import com.masalabazaar.billing.ui.activities.database.DatabaseHelper
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -26,12 +32,17 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var itemEntryLauncher: ActivityResultLauncher<Intent>
 
+    private lateinit var customerNameInput: EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         recyclerView = findViewById(R.id.recyclerView)
         totalAmountText = findViewById(R.id.totalAmount)
+
+        customerNameInput = findViewById(R.id.customerNameInput)
+
         generatePdfButton = findViewById(R.id.generatePdfButton)
         historyButton = findViewById(R.id.historyButton)
         itemDataFeedButton = findViewById(R.id.itemDataFeedButton)
@@ -43,15 +54,22 @@ class MainActivity : AppCompatActivity() {
         loadItems()
 
         generatePdfButton.setOnClickListener {
+
+            val customerName = customerNameInput.text.toString().trim()
+            if (customerName.isEmpty()) {
+                Toast.makeText(this, "Please enter the Customer Name", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val pdfGenerator = PDFGenerator(this)
-            val file: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), "Prashant Bale")
+            val file: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), customerName)
             file?.let { it1 ->
                 PrintHelper(this).printPDF(it1)
             }
 
             dbHelper.saveReport(
                 filename = file?.name!!,
-                customer = "Prashant Bale".replace(" ", "_"),
+                customer = customerName.replace(" ", "_"),
                 amount = totalAmountText.text.toString()
                 )
         }

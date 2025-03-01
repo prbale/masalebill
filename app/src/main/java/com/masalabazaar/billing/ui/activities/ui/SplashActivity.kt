@@ -1,4 +1,4 @@
-package com.masalabazaar.billing.ui.activities
+package com.masalabazaar.billing.ui.activities.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator

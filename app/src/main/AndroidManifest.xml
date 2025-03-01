@@ -20,7 +20,7 @@
 
         <!-- Splash screen activity shown when the app is launched -->
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,12 +31,12 @@
         </activity>
 
         <activity
-            android:name=".ui.activities.HistoryActivity"
+            android:name=".ui.activities.ui.HistoryActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ui.activities.ItemEntryActivity"
+            android:name=".ui.activities.ui.ItemEntryActivity"
             android:exported="true"
             android:screenOrientation="portrait">
         </activity>
