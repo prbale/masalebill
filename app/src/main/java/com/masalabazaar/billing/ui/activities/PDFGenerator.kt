@@ -67,7 +67,7 @@ class PDFGenerator(private val context: Context) {
 
         document.finishPage(page)
 
-        val pdfFile = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "bill.pdf")
+        val pdfFile = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
         try {
             val fos = FileOutputStream(pdfFile)
             document.writeTo(fos)
