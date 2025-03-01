@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             val pdfGenerator = PDFGenerator(this)
-            val file: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), customerName)
+            val file: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), customerName.replace(" ", "_"))
             file?.let { it1 ->
                 PrintHelper(this).printPDF(it1)
             }
