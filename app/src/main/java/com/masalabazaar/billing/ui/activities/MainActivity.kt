@@ -1,10 +1,13 @@
 package com.masalabazaar.billing.ui.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var historyButton: Button
     private lateinit var itemDataFeedButton: Button
     private val items = mutableListOf<BillItem>()
+
+    private lateinit var itemEntryLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +61,19 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Initialize Activity Result Launcher
+        itemEntryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                finish()
+            }
+            else {
+                loadItems()
+            }
+        }
+
         itemDataFeedButton.setOnClickListener {
             val intent = Intent(this, ItemEntryActivity::class.java)
-            startActivity(intent)
+            itemEntryLauncher.launch(intent)
         }
     }
 
@@ -79,10 +94,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         adapter.notifyDataSetChanged()
+
+        runOnUiThread {
+            adapter.notifyItemRangeChanged(0, items.size)
+        }
     }
 
     private fun updateTotalAmount() {
         val total = items.sumOf { it.ratePerKg * it.quantity }
-        totalAmountText.text = "$total"
+        totalAmountText.text = "Total Amount : $total"
     }
 }

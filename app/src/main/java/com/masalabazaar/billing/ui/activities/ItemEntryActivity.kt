@@ -1,5 +1,6 @@
 package com.masalabazaar.billing.ui.activities
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -40,6 +41,7 @@ class ItemEntryActivity : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             saveItemsToDatabase()
+            setResult(Activity.RESULT_OK) // Notify MainActivity that data is saved
         }
     }
 
@@ -65,3 +67,4 @@ class ItemEntryActivity : AppCompatActivity() {
         }
     }
 }
+
