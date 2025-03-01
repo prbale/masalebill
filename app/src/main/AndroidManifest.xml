@@ -38,8 +38,13 @@
         <activity
             android:name=".ui.activities.ui.ItemEntryActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activities.ui.PdfViewerActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+
 
     </application>
 

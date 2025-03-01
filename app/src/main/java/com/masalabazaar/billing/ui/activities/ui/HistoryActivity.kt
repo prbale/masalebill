@@ -2,7 +2,7 @@ package com.masalabazaar.billing.ui.activities.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.os.Environment
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -46,22 +46,22 @@ class HistoryActivity : AppCompatActivity() {
         builder.setTitle("Choose Action")
         builder.setItems(options) { _, which ->
             when (which) {
-                0 -> viewPDF(reportItem.fileName)
-                1 -> printPDF(reportItem.fileName)
+                0 -> viewPDF(reportItem.customerName)
+                1 -> printPDF(reportItem.customerName)
             }
         }
         builder.show()
     }
 
-    private fun viewPDF(fileName: String) {
-        val pdfFile = File(getExternalFilesDir(null), fileName)
+    private fun viewPDF(customerName: String) {
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
         val intent = Intent(this, PdfViewerActivity::class.java)
         intent.putExtra("pdf_path", pdfFile.absolutePath)
         startActivity(intent)
     }
 
-    private fun printPDF(fileName: String) {
-        val pdfFile = File(getExternalFilesDir(null), fileName)
+    private fun printPDF(customerName: String) {
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
         val printHelper = PrintHelper(this)
         printHelper.printPDF(pdfFile)
     }
