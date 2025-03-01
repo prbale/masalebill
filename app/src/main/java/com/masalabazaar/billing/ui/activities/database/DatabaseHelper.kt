@@ -92,6 +92,17 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return reports
     }
 
+    fun deleteReport(filename: String) {
+        val db = writableDatabase
+        val result = db.delete("reports", "filename = ?", arrayOf(filename))
+        if (result > 0) {
+            Log.d("DatabaseHelper", "Report deleted successfully: $filename")
+        } else {
+            Log.e("DatabaseHelper", "Failed to delete report: $filename")
+        }
+        db.close()
+    }
+
     companion object {
         private const val DATABASE_NAME = "MasalaBilling.db"
         private const val DATABASE_VERSION = 2

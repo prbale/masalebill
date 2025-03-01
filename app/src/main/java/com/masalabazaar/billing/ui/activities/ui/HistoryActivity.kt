@@ -40,13 +40,14 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun showOptionsDialog(reportItem: ReportItem) {
-        val options = arrayOf("View PDF", "Print")
+        val options = arrayOf("View PDF", "Print", "Delete Report")
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Choose Action")
         builder.setItems(options) { _, which ->
             when (which) {
                 0 -> viewPDF(reportItem.customerName)
                 1 -> printPDF(reportItem.customerName)
+                2 -> showDeleteConfirmation(reportItem)
             }
         }
         builder.show()
@@ -63,5 +64,26 @@ class HistoryActivity : AppCompatActivity() {
         val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
         val printHelper = PrintHelper(this)
         printHelper.printPDF(pdfFile)
+    }
+
+    private fun showDeleteConfirmation(reportItem: ReportItem) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirm Delete")
+        builder.setMessage("Are you sure you want to delete this report?")
+        builder.setPositiveButton("Yes") { _, _ -> deleteReport(reportItem) }
+        builder.setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+        builder.show()
+    }
+
+    private fun deleteReport(reportItem: ReportItem) {
+        val dbHelper = DatabaseHelper(this)
+        dbHelper.deleteReport(reportItem.fileName)
+
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${reportItem.fileName}")
+        if (pdfFile.exists()) {
+            pdfFile.delete()
+        }
+
+        loadHistory() // Refresh list after deletion
     }
 }
