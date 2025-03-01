@@ -33,6 +33,11 @@
         <activity
             android:name=".ui.activities.HistoryActivity"
             android:exported="true"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activities.ItemEntryActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
         </activity>
 

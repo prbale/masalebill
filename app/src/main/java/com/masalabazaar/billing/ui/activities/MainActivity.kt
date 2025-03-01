@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var totalAmountText: TextView
     private lateinit var generatePdfButton: Button
     private lateinit var historyButton: Button
+    private lateinit var itemDataFeedButton: Button
     private val items = mutableListOf<BillItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         totalAmountText = findViewById(R.id.totalAmount)
         generatePdfButton = findViewById(R.id.generatePdfButton)
         historyButton = findViewById(R.id.historyButton)
+        itemDataFeedButton = findViewById(R.id.itemDataFeedButton)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = BillAdapter(items) { updateTotalAmount() }
@@ -53,15 +55,29 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryActivity::class.java)
             startActivity(intent)
         }
+
+        itemDataFeedButton.setOnClickListener {
+            val intent = Intent(this, ItemEntryActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     val dbHelper = DatabaseHelper(this)
 
     private fun loadItems() {
-
+        val dbHelper = DatabaseHelper(this)
         val itemList = dbHelper.getItems()
-        items.clear()
-        items.addAll(itemList)
+
+        if (itemList.isNotEmpty()) {
+            items.clear()
+            items.addAll(itemList)
+        } else {
+            // Initialize with default 0 values if no data is in the database
+            items.clear()
+            for (i in 1..30) {
+                items.add(BillItem("Item $i", 0.0, 0.0))
+            }
+        }
         adapter.notifyDataSetChanged()
     }
 

@@ -33,6 +33,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         }
     }
 
+    fun saveItems(items: List<BillItem>) {
+        val db = writableDatabase
+        db.execSQL("DELETE FROM items") // Clear old items before saving new ones
+
+        for (item in items) {
+            val values = ContentValues().apply {
+                put("name", item.name)
+                put("ratePerKg", item.ratePerKg)
+            }
+            db.insert("items", null, values)
+        }
+
+        db.close()
+    }
+
+
     private fun seedDatabase(db: SQLiteDatabase) {
         val items = listOf(
             Pair("Turmeric", 200.0),
