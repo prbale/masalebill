@@ -1,0 +1,75 @@
+[
+    {
+        "address": "Shop No 1A to E, 1216, Fergusson College Rd, Pune, Maharashtra",
+        "area": "centre",
+        "food": "Chinese",
+        "id": "19210",
+        "introduction": "Pizza hut is a large chain with restaurants nationwide offering convenience pizzas pasta and salads to eat in or take away",
+        "location": "52.20103,0.126023",
+        "name": "Pizza Hut",
+        "phone": "08655616021",
+        "postcode": "411004",
+        "type": "restaurant"
+    },
+    {
+        "address": "Rajiv Gandhi Infotech Park, Hinjawadi, Pune, Maharashtra ",
+        "area": "east",
+        "food": "North Indian",
+        "id": "30650",
+        "introduction": "Pind Punjab in Pune is known for providing scrumptious biryani.",
+        "location": "52.21768,0.224907",
+        "name": "Pind Punjab",
+        "phone": "07887873222",
+        "postcode": "411014",
+        "signature": "african babooti",
+        "type": "restaurant"
+    },
+    {
+        "address": "Phoenix Marketcity, Mall, Clover Park, Viman Nagar, Pune, Maharashtra ",
+        "area": "centre",
+        "food": "Chinese",
+        "id": "19214",
+        "introduction": "Burger King is the second largest fast food hamburger chain in the world.",
+        "location": "52.200187,0.126407",
+        "name": "Burger King",
+        "phone": "086557 95243",
+        "postcode": "411014",
+        "type": "restaurant"
+    },
+    {
+        "address": "Second Floor, Unit no. 224, Nyati Empress, Clover Park, Panchsil Business Park, Pune, Maharashtra",
+        "area": "south",
+        "food": "Indian",
+        "id": "19192",
+        "introduction": "A buffet restaurant that is specialised in BBQ varieties, Indian cuisine, exotic meats, continental specials, and drool-worthy desserts",
+        "location": "52.188528,0.140627",
+        "name": "Absolute Barbecues",
+        "phone": "7337383767",
+        "postcode": "411014",
+        "type": "restaurant"
+    },
+    {
+        "address": "Sr.No.257/1/1A, opp. HDFC bank Padmbhushan chowk, Hinjawadi Phase II, Hinjawadi, Pune, Maharashtra",
+        "area": "south",
+        "food": "Italian",
+        "id": "19196",
+        "introduction": "Inspired by the lively streets, enchanting canals, and the vibrant cultural tapestry of Amsterdam, we bring you an experience that's a fusion of the Dutch spirit and Indian hospitality.",
+        "location": "52.190176,0.13699",
+        "name": "I Amsterdam -All Day Bar & Grill",
+        "phone": "08669698666",
+        "postcode": "411057",
+        "type": "restaurant"
+    },
+    {
+        "address": "Plot No 1278, Suyog Plaza, Jangali Maharaj Rd, Deccan Gymkhana, Pune, Maharashtra",
+        "area": "south",
+        "food": "Chinese",
+        "id": "19191",
+        "introduction": "McDonald's known for its hamburgers, french fries, and name-brand sandwiches such as the Big Mac, Quarter Pounder, and Egg McMuffin, as well as the child-focused Happy Meal.",
+        "location": "52.188747,0.138941",
+        "name": "McDonald's",
+        "phone": "08928304011",
+        "postcode": "411004",
+        "type": "restaurant"
+    }
+]
