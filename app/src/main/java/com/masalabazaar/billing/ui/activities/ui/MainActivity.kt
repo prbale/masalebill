@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupButtonActions() {
         generatePdfButton.setOnClickListener {
-            val userName = customerNameInput.text.toString().trim()
+            val userName = customerNameInput.text.toString().trim().replace(" ", "_")
             if (userName.isEmpty()) {
                 Toast.makeText(this, "Please enter the Customer Name", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener

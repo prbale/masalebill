@@ -18,6 +18,16 @@
         android:theme="@style/Theme.FireDatabase"
         tools:targetApi="31">
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.masalabazaar.billing.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <!-- Splash screen activity shown when the app is launched -->
         <activity
             android:name=".ui.activities.ui.MainActivity"

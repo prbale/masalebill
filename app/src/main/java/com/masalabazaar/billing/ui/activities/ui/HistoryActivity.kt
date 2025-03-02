@@ -3,8 +3,10 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.masalabazaar.billing.R
@@ -45,8 +47,8 @@ class HistoryActivity : AppCompatActivity() {
         builder.setTitle("Choose Action")
         builder.setItems(options) { _, which ->
             when (which) {
-                0 -> viewPDF(reportItem.customerName)
-                1 -> printPDF(reportItem.customerName)
+                0 -> viewPDF(reportItem.customerName.replace(" ", "_"))
+                1 -> printPDF(reportItem.customerName.replace(" ", "_"))
                 2 -> showDeleteConfirmation(reportItem)
             }
         }
@@ -55,9 +57,17 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun viewPDF(customerName: String) {
         val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
-        val intent = Intent(this, PdfViewerActivity::class.java)
-        intent.putExtra("pdf_path", pdfFile.absolutePath)
-        startActivity(intent)
+
+        if (pdfFile.exists()) {
+            val uri = FileProvider.getUriForFile(this, "com.masalabazaar.billing.provider", pdfFile)
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "PDF file not found!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun printPDF(customerName: String) {
