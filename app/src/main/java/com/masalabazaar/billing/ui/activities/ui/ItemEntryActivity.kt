@@ -56,6 +56,7 @@ class ItemEntryActivity : AppCompatActivity() {
                     width = 0
                     columnSpec = GridLayout.spec(1, 1f) // Second Column
                 }
+                setSelectAllOnFocus(true)
             }
 
             // Populate fields if data exists in the database
