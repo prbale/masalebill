@@ -1,6 +1,7 @@
 package com.masalabazaar.billing.ui.activities.ui
 
 import android.app.Activity
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.masalabazaar.billing.R
 import com.masalabazaar.billing.ui.activities.data.BillItem
 import com.masalabazaar.billing.ui.activities.database.DatabaseHelper
@@ -48,7 +50,9 @@ class ItemEntryActivity : AppCompatActivity() {
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
                     columnSpec = GridLayout.spec(0, 1f) // First Column
+                    setMargins(0, 16.dpToPx(), 0, 0) // Add top margin (16dp)
                 }
+
             }
             val itemRateInput = EditText(this).apply {
                 hint = "Price per kg"
@@ -57,8 +61,12 @@ class ItemEntryActivity : AppCompatActivity() {
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
                     columnSpec = GridLayout.spec(1, 1f) // Second Column
+                    setMargins(0, 16.dpToPx(), 0, 0) // Add top margin (16dp)
                 }
                 setSelectAllOnFocus(true)
+
+                val boxSelectorDrawable = ContextCompat.getDrawable(context, R.drawable.edittext_selector)
+                background = boxSelectorDrawable
             }
 
             // Populate fields if data exists in the database
@@ -69,6 +77,7 @@ class ItemEntryActivity : AppCompatActivity() {
 
             itemContainer.addView(itemNameInput)
             itemContainer.addView(itemRateInput)
+
             itemInputs.add(Pair(itemNameInput, itemRateInput))
         }
 
@@ -77,6 +86,16 @@ class ItemEntryActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK) // Notify MainActivity that data is saved
             finish()
         }
+    }
+
+    // Extension function to convert dp to px
+    fun Int.dpToPx(): Int {
+        return (this * Resources.getSystem().displayMetrics.density).toInt()
+    }
+
+    // Extension function for Float (if you need decimal precision)
+    fun Float.dpToPx(): Float {
+        return this * Resources.getSystem().displayMetrics.density
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

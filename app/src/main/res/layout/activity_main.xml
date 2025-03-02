@@ -32,10 +32,10 @@
         android:id="@+id/customerNameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Customer Name"
+        android:hint="Enter customer name"
         android:textSize="20sp"
         android:padding="20dp"
-        android:background="#6F81B9"
+        android:background="#A4ACC3"
         android:textColor="@android:color/white"
         android:textColorHint="@color/background"
         android:layout_marginBottom="20dp"/>
