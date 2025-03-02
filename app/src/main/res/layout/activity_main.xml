@@ -50,17 +50,96 @@
         android:clipToPadding="false"
         android:background="@android:color/white"/>
 
-    <!-- Total Amount Display -->
-    <TextView
-        android:id="@+id/totalAmount"
+    <!-- Total, Paid, Remaining Amount Display -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Total: ₹0.0"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/holo_red_dark"
-        android:padding="8dp"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:background="#BDD2E7"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="एकूण रक्कम"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/totalAmount"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="₹0.0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_red_dark"
+                android:padding="8dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="जमा रक्कम"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <EditText
+                android:id="@+id/paidAmount"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="₹0.0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_green_dark"
+                android:padding="8dp"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dip"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="बाकी रक्कम"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/remainingAmount"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="₹0.0"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/holo_blue_dark"
+                android:padding="8dp"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- Buttons Layout -->
     <LinearLayout

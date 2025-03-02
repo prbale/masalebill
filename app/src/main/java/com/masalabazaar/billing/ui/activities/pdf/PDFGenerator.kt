@@ -23,7 +23,13 @@ import java.util.Locale
 
 class PDFGenerator(private val context: Context) {
 
-    fun generatePDF(items: List<BillItem>, totalAmount: String, customerName: String): File? {
+    fun generatePDF(
+        items: List<BillItem>,
+        totalAmount: String,
+        paidAmount: String,
+        remainingAmount: String,
+        customerName: String): File? {
+
         try {
 
             val document = Document()
@@ -38,6 +44,7 @@ class PDFGenerator(private val context: Context) {
             val titleFont = Font(baseFont, 18f, Font.BOLD)
             val headerFont = Font(baseFont, 16f, Font.BOLD)
             val textFont = Font(baseFont, 14f, Font.NORMAL)
+            val textLargeFont = Font(baseFont, 17f, Font.NORMAL)
 
             // Title
             val title = Paragraph("आदर्श ऍग्रो इंडस्ट्रीज - एडवण", titleFont)
@@ -68,9 +75,16 @@ class PDFGenerator(private val context: Context) {
 
             document.add(table)
 
-            val totalParagraph = Paragraph("\nएकूण रक्कम: $totalAmount रुपये", headerFont)
-            totalParagraph.alignment = Element.ALIGN_RIGHT
-            document.add(totalParagraph)
+            // Add Total, Paid, and Remaining Amount
+            val summaryTable = PdfPTable(2)
+            summaryTable.widthPercentage = 100f
+            summaryTable.setWidths(floatArrayOf(4f, 3f))
+            document.add(Paragraph(" ", textFont))
+            document.add(Paragraph(" ", textFont))
+            addSummaryRow(summaryTable, "एकूण रक्कम", totalAmount, textFont)
+            addSummaryRow(summaryTable, "जमा रक्कम", paidAmount, textFont)
+            addSummaryRow(summaryTable, "बाकी रक्कम", remainingAmount, textFont)
+            document.add(summaryTable)
 
             document.close()
             return pdfFile
@@ -80,6 +94,18 @@ class PDFGenerator(private val context: Context) {
             e.printStackTrace()
         }
         return null
+    }
+
+    private fun addSummaryRow(table: PdfPTable, label: String, value: String, font: Font) {
+        val labelCell = PdfPCell(Phrase(label, font))
+        labelCell.horizontalAlignment = Element.ALIGN_LEFT
+        labelCell.border = PdfPCell.NO_BORDER
+        table.addCell(labelCell)
+
+        val valueCell = PdfPCell(Phrase(value, font))
+        valueCell.horizontalAlignment = Element.ALIGN_RIGHT
+        valueCell.border = PdfPCell.NO_BORDER
+        table.addCell(valueCell)
     }
 
     private fun addTableHeader(table: PdfPTable, font: Font) {

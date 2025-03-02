@@ -3,6 +3,8 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -27,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: BillAdapter
     private lateinit var totalAmountText: TextView
+    private lateinit var paidAmountInput: EditText
+    private lateinit var remainingAmountText: TextView
     private lateinit var generatePdfButton: Button
     private lateinit var historyButton: Button
     private lateinit var addItemButton: Button
@@ -45,6 +49,8 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         totalAmountText = findViewById(R.id.totalAmount)
+        paidAmountInput = findViewById(R.id.paidAmount)
+        remainingAmountText = findViewById(R.id.remainingAmount)
         generatePdfButton = findViewById(R.id.generatePdfButton)
         historyButton = findViewById(R.id.historyButton)
         addItemButton = findViewById(R.id.addItemButton)
@@ -53,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         loadItems()
         setupButtonActions()
+        setupPaidAmountListener()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -78,8 +85,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateRemainingAmount() {
+        val totalAmount = totalAmountText.text.toString().replace("₹ ", "").toDoubleOrNull() ?: 0.0
+        val paidAmount = paidAmountInput.text.toString().replace("₹ ", "").toDoubleOrNull() ?: 0.0
+        val remainingAmount = totalAmount - paidAmount
+        remainingAmountText.text = "₹ $remainingAmount"
+    }
+
+    private fun setupPaidAmountListener() {
+        paidAmountInput.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                updateRemainingAmount()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
     private fun clearFields() {
         customerNameInput.text.clear()
+        paidAmountInput.text.clear()
+
         for (item in items) {
             item.quantity = 0.0
         }
@@ -132,12 +159,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateTotalAmount() {
         val total = items.sumOf { it.ratePerKg * it.quantity }
-        totalAmountText.text = "Total: ₹$total"
+        totalAmountText.text = "₹ $total"
+        updateRemainingAmount()
     }
 
     private fun generateAndSavePDF(userName: String) {
         val pdfGenerator = PDFGenerator(this)
-        val pdfFile: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), userName)
+        val pdfFile: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), "₹ "+paidAmountInput.text.toString(), remainingAmountText.text.toString(), userName)
 
         pdfFile?.let {
             val dbHelper = DatabaseHelper(this)
