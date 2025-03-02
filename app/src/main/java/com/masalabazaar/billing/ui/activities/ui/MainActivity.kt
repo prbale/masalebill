@@ -3,11 +3,14 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.masalabazaar.billing.R
@@ -32,6 +35,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.title = "आदर्श ऍग्रो इंडस्ट्रीज - एडवण"
+        toolbar.inflateMenu(R.menu.main_menu);
+        setSupportActionBar(toolbar)
+
         recyclerView = findViewById(R.id.recyclerView)
         totalAmountText = findViewById(R.id.totalAmount)
         generatePdfButton = findViewById(R.id.generatePdfButton)
@@ -42,6 +50,25 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         loadItems()
         setupButtonActions()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_history -> {
+                startActivity(Intent(this, HistoryActivity::class.java))
+                true
+            }
+            R.id.menu_add_items -> {
+                startActivity(Intent(this, ItemEntryActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -60,10 +87,12 @@ class MainActivity : AppCompatActivity() {
             generateAndSavePDF(userName)
         }
 
+        historyButton.visibility = View.GONE
         historyButton.setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
 
+        addItemButton.visibility = View.GONE
         addItemButton.setOnClickListener {
             startActivity(Intent(this, ItemEntryActivity::class.java))
         }

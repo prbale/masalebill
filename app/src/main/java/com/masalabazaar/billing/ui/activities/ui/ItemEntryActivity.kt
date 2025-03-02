@@ -1,24 +1,34 @@
 package com.masalabazaar.billing.ui.activities.ui
 
+import android.R.attr
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.masalabazaar.billing.R
 import com.masalabazaar.billing.ui.activities.data.BillItem
 import com.masalabazaar.billing.ui.activities.database.DatabaseHelper
+
 
 class ItemEntryActivity : AppCompatActivity() {
 
     private lateinit var itemContainer: GridLayout
     private lateinit var saveButton: Button
-    private val itemInputs = mutableListOf<Pair<EditText, EditText>>() // Pair(ItemName, RatePerKg)
+    private val itemInputs = mutableListOf<Pair<TextView, EditText>>() // Pair(ItemName, RatePerKg)
     private lateinit var dbHelper: DatabaseHelper
     private var existingItems: List<BillItem> = listOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_entry)
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.title = "Enter Item Details"
+        setSupportActionBar(toolbar)
 
         itemContainer = findViewById(R.id.itemContainer)
         saveButton = findViewById(R.id.save_btn)
@@ -28,9 +38,9 @@ class ItemEntryActivity : AppCompatActivity() {
 
         // Dynamically create 30 input fields side by side
         for (i in 1..30) {
-            val itemNameInput = EditText(this).apply {
+            val itemNameInput = TextView(this).apply {
                 hint = "Item Name $i"
-                textSize = 16f
+                textSize = 20f
                 layoutParams = GridLayout.LayoutParams().apply {
                     width = 0
                     columnSpec = GridLayout.spec(0, 1f) // First Column
@@ -61,6 +71,13 @@ class ItemEntryActivity : AppCompatActivity() {
             saveItemsToDatabase()
             setResult(Activity.RESULT_OK) // Notify MainActivity that data is saved
             finish()
+        }
+    }
+
+    private fun setMargins(view: View, left: Int, top: Int, right: Int, bottom: Int) {
+        if (view.getLayoutParams() is MarginLayoutParams) {
+            (view.getLayoutParams() as MarginLayoutParams).setMargins(left, top, right, bottom)
+            view.requestLayout()
         }
     }
 
