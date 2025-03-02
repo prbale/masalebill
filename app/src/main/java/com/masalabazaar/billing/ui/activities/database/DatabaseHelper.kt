@@ -1,6 +1,7 @@
 package com.masalabazaar.billing.ui.activities.database
 
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -8,6 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.masalabazaar.billing.ui.activities.data.BillItem
 import com.masalabazaar.billing.ui.activities.data.ReportItem
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -78,7 +81,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             put("filename", filename)
             put("customer", customer)
             put("amount", amount)
-            put("dateTime", System.currentTimeMillis().toString())
+            put("dateTime", getDate())
         }
         val result = db.insert("reports", null, values)
         if (result == -1L) {
@@ -87,6 +90,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             Log.d("DatabaseHelper", "Report saved successfully: $filename")
         }
         db.close()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getDate(): String {
+        val currentTimeMillis = System.currentTimeMillis()
+        val date = Date(currentTimeMillis)
+        val sdf = SimpleDateFormat("dd MMMM yyyy, h:mm a")
+        val formattedDate = sdf.format(date)
+        return formattedDate
     }
 
     fun getSavedReports(): List<ReportItem> {
