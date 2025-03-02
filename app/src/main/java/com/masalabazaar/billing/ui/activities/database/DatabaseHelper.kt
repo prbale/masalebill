@@ -15,12 +15,33 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.execSQL("CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, ratePerKg REAL)")
         db.execSQL("CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, filename TEXT, customer TEXT, amount TEXT, dateTime TEXT)")
         Log.d("DatabaseHelper", "Tables created: items, reports")
+        insertDefaultItems(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS items")
         db.execSQL("DROP TABLE IF EXISTS reports")
         onCreate(db)
+    }
+
+    private fun insertDefaultItems(db: SQLiteDatabase) {
+        val defaultItems = listOf(
+            "मिरची पटना", "मिरची बेडगी", "मिरची काश्मिरी", "मिरची संकेश्वरी", "मिरची रेशमपट्टी",
+            "धने ( कोथिंबीर )", "राई", "जिरा", "काळीमिरी", "दालचिनी ( तज )", "लवंग", "हिंग",
+            "खसखस", "मेथी", "चणा", "बडीशोप", "मिक्स मसाला", "हळद राजापुरी", "हळद सेलम", "हळद निजाम",
+            "वेलदोडा ( हिरवी वेलची )", "मसाला वेलची ( काली वेलची / मोठी वेलची )", "जयवंती ( जायपत्री / मायपत्री )",
+            "रामपत्री", "बादियान ( कर्णफुल / चक्रीफूल )", "नागकेशर", "शहाजिरे", "त्रीफल  ( तीरफळ )",
+            "दगडफूल", "तमालपत्र", "काबाबचिनी  ( कंकोळ )", "सुंठ", "जायफळ अखंड", "जायफळ सोललेली",
+            "पिंपळी", "कलोंजी ( कांदाबी )"
+        )
+
+        for (item in defaultItems) {
+            val values = ContentValues().apply {
+                put("name", item)
+                put("ratePerKg", 0.0) // Default price set to 0
+            }
+            db.insert("items", null, values)
+        }
     }
 
     fun saveItems(items: List<BillItem>) {
