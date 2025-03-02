@@ -67,8 +67,22 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, ItemEntryActivity::class.java))
                 true
             }
+            R.id.menu_clear -> {
+                clearFields()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun clearFields() {
+        customerNameInput.text.clear()
+        for (item in items) {
+            item.quantity = 0.0
+        }
+        adapter.notifyDataSetChanged()
+        updateTotalAmount()
+        Toast.makeText(this, "Cleared !!!", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupRecyclerView() {

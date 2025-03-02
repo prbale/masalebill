@@ -28,9 +28,9 @@ class PDFGenerator(private val context: Context) {
 
             // Marathi Font
             val baseFont = BaseFont.createFont("assets/marathi.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
-            val titleFont = Font(baseFont, 16f, Font.BOLD)
-            val headerFont = Font(baseFont, 14f, Font.BOLD)
-            val textFont = Font(baseFont, 12f, Font.NORMAL)
+            val titleFont = Font(baseFont, 18f, Font.BOLD)
+            val headerFont = Font(baseFont, 16f, Font.BOLD)
+            val textFont = Font(baseFont, 14f, Font.NORMAL)
 
             // Title
             val title = Paragraph("आदर्श ऍग्रो इंडस्ट्रीज - एडवण", titleFont)
