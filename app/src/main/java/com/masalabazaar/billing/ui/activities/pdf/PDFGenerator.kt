@@ -1,82 +1,105 @@
 package com.masalabazaar.billing.ui.activities.pdf
 
 import android.content.Context
-import android.graphics.*
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
+import com.itextpdf.text.*
+import com.itextpdf.text.pdf.BaseFont
+import com.itextpdf.text.pdf.PdfPCell
+import com.itextpdf.text.pdf.PdfPTable
+import com.itextpdf.text.pdf.PdfWriter
 import com.masalabazaar.billing.ui.activities.data.BillItem
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PDFGenerator(private val context: Context) {
 
     fun generatePDF(items: List<BillItem>, totalAmount: String, customerName: String): File? {
-        val document = PdfDocument()
-        val pageInfo = PdfDocument.PageInfo.Builder(400, 600, 1).create()
-        val page = document.startPage(pageInfo)
-        val canvas: Canvas = page.canvas
-        val paint = Paint()
-        paint.textSize = 12f
-        paint.typeface = Typeface.DEFAULT_BOLD
-
-        // Draw Header
-        paint.textAlign = Paint.Align.CENTER
-        canvas.drawText("Masala Billing Invoice", 200f, 30f, paint)
-        paint.textAlign = Paint.Align.LEFT
-
-        // Draw Customer Name
-        paint.textSize = 10f
-        paint.typeface = Typeface.DEFAULT
-        canvas.drawText("Customer: $customerName", 20f, 50f, paint)
-
-        // Draw Table Header with Background Color
-        val headerPaint = Paint()
-        headerPaint.color = Color.LTGRAY
-        canvas.drawRect(20f, 70f, 380f, 90f, headerPaint)
-
-        paint.color = Color.BLACK
-        paint.textSize = 10f
-        paint.typeface = Typeface.DEFAULT_BOLD
-        canvas.drawText("Item Name", 25f, 85f, paint)
-        canvas.drawText("Rate (₹/kg)", 150f, 85f, paint)
-        canvas.drawText("Qty (kg)", 250f, 85f, paint)
-        canvas.drawText("Total (₹)", 320f, 85f, paint)
-
-        paint.typeface = Typeface.DEFAULT
-        var yPosition = 100f
-
-        // Draw Table Data
-        for (item in items) {
-            val totalPrice = item.ratePerKg * item.quantity
-            canvas.drawText(item.name, 25f, yPosition, paint)
-            canvas.drawText("₹${item.ratePerKg}", 150f, yPosition, paint)
-            canvas.drawText("${item.quantity}", 250f, yPosition, paint)
-            canvas.drawText("₹$totalPrice", 320f, yPosition, paint)
-            yPosition += 20f
-        }
-
-        // Draw Footer
-        yPosition += 10f
-        canvas.drawLine(20f, yPosition, 380f, yPosition, paint)
-        yPosition += 20f
-
-        paint.typeface = Typeface.DEFAULT_BOLD
-        paint.color = Color.RED
-        canvas.drawText("Total Amount: $totalAmount", 250f, yPosition, paint)
-
-        document.finishPage(page)
-
-        val pdfFile = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
         try {
-            val fos = FileOutputStream(pdfFile)
-            document.writeTo(fos)
+            val document = Document()
+            val fileName = "${customerName.replace(" ", "_")}_bill.pdf"
+            val pdfFile = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)
+            PdfWriter.getInstance(document, FileOutputStream(pdfFile))
+
+            document.open()
+
+            // Marathi Font
+            val baseFont = BaseFont.createFont("assets/marathi.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
+            val titleFont = Font(baseFont, 16f, Font.BOLD)
+            val headerFont = Font(baseFont, 14f, Font.BOLD)
+            val textFont = Font(baseFont, 12f, Font.NORMAL)
+
+            // Title
+            val title = Paragraph("आदर्श ऍग्रो इंडस्ट्रीज - एडवण", titleFont)
+            title.alignment = Element.ALIGN_CENTER
+            document.add(title)
+
+            val producer = Paragraph(" उत्पादक - नामांकित लक्ष्मी मसाले ", textFont)
+            producer.alignment = Element.ALIGN_CENTER
+            document.add(producer)
+
+            val owner = Paragraph(" श्री. अरविंद चौधरी - 97766672976 ", textFont)
+            owner.alignment = Element.ALIGN_CENTER
+            document.add(owner)
+
+            val customerDetails = Paragraph("\nग्राहक: $customerName  |  दिनांक: ${getCurrentDate()}\n", textFont)
+            document.add(customerDetails)
+
+            document.add(Paragraph(" ", textFont))
+            document.add(Paragraph(" ", textFont))
+
+            // Create Table
+            val table = PdfPTable(4)
+            table.widthPercentage = 100f
+            table.setWidths(floatArrayOf(2f, 3f, 2f, 2f))
+
+            addTableHeader(table, headerFont)
+            addTableRows(table, items, textFont)
+
+            document.add(table)
+
+            val totalParagraph = Paragraph("\nएकूण रक्कम: $totalAmount रुपये", headerFont)
+            totalParagraph.alignment = Element.ALIGN_RIGHT
+            document.add(totalParagraph)
+
             document.close()
-            fos.close()
             return pdfFile
         } catch (e: IOException) {
+            e.printStackTrace()
+        } catch (e: DocumentException) {
             e.printStackTrace()
         }
         return null
     }
+
+    private fun addTableHeader(table: PdfPTable, font: Font) {
+        val headers = arrayOf("क्रमांक", "वस्तू", "प्रमाण (किलो)", "दर (प्रति किलो)")
+
+        for (header in headers) {
+            val cell = PdfPCell(Phrase(header, font))
+            cell.horizontalAlignment = Element.ALIGN_CENTER
+            cell.backgroundColor = BaseColor.LIGHT_GRAY
+            table.addCell(cell)
+        }
+    }
+
+    private fun addTableRows(table: PdfPTable, items: List<BillItem>, font: Font) {
+        var count = 1
+        for (item in items) {
+            table.addCell(Phrase("$count", font))
+            table.addCell(Phrase(item.name, font))
+            table.addCell(Phrase("${item.quantity}", font))
+            table.addCell(Phrase("${item.ratePerKg}", font))
+            count++
+        }
+    }
+
+    private fun getCurrentDate(): String {
+        val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        return sdf.format(Date())
+    }
 }
+
