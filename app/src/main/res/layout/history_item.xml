@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="Date: 12 March 2025"
             android:textSize="14sp"
-            android:textColor="@color/darker_gray"
+            android:textColor="#1F1E1E"
             android:paddingTop="4dp"/>
 
         <TextView

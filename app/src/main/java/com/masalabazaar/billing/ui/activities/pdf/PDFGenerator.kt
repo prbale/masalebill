@@ -59,7 +59,7 @@ class PDFGenerator(private val context: Context) {
             owner.alignment = Element.ALIGN_CENTER
             document.add(owner)
 
-            val customerDetails = Paragraph("\nग्राहक: $customerName  |  दिनांक: ${getCurrentDate()}\n", textFont)
+            val customerDetails = Paragraph("\nग्राहक: ${customerName.trim().replace("_", " ")}  |  दिनांक: ${getCurrentDate()}\n", textFont)
             document.add(customerDetails)
 
             document.add(Paragraph(" ", textFont))

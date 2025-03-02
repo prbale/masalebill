@@ -23,9 +23,9 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         val report = reportList[position]
-        holder.customerName.text = report.customerName
+        holder.customerName.text = report.customerName.trim().replace("_", " ")
         holder.date.text = "Date: ${report.dateTime}"
-        holder.amount.text = "Total: ₹${report.amount}"
+        holder.amount.text = "Total: ${report.amount}"
 
         holder.cardView.setOnClickListener {
             onItemClick(report)
