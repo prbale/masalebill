@@ -1,13 +1,15 @@
 package com.masalabazaar.billing.ui.activities.ui
 
-import android.R.attr
 import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.GridLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.masalabazaar.billing.R

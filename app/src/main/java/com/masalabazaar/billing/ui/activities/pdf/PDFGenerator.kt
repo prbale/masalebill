@@ -1,9 +1,14 @@
 package com.masalabazaar.billing.ui.activities.pdf
 
 import android.content.Context
-import android.graphics.pdf.PdfDocument
 import android.os.Environment
-import com.itextpdf.text.*
+import com.itextpdf.text.BaseColor
+import com.itextpdf.text.Document
+import com.itextpdf.text.DocumentException
+import com.itextpdf.text.Element
+import com.itextpdf.text.Font
+import com.itextpdf.text.Paragraph
+import com.itextpdf.text.Phrase
 import com.itextpdf.text.pdf.BaseFont
 import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
@@ -13,7 +18,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class PDFGenerator(private val context: Context) {
 

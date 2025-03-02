@@ -2,9 +2,9 @@ package com.masalabazaar.billing.ui.activities.pdf
 
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
+import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
 import android.print.PrintDocumentInfo
-import android.print.PrintAttributes
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
