@@ -19,6 +19,7 @@ class PDFGenerator(private val context: Context) {
 
     fun generatePDF(items: List<BillItem>, totalAmount: String, customerName: String): File? {
         try {
+
             val document = Document()
             val fileName = "${customerName.replace(" ", "_")}_bill.pdf"
             val pdfFile = File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)

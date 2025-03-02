@@ -3,6 +3,7 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.R.attr
 import android.app.Activity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
@@ -27,8 +28,9 @@ class ItemEntryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_item_entry)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        toolbar.title = "Enter Item Details"
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Enter Details"
 
         itemContainer = findViewById(R.id.itemContainer)
         saveButton = findViewById(R.id.save_btn)
@@ -73,6 +75,15 @@ class ItemEntryActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun setMargins(view: View, left: Int, top: Int, right: Int, bottom: Int) {
         if (view.getLayoutParams() is MarginLayoutParams) {

@@ -3,6 +3,7 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -27,13 +28,23 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_history)
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
-        toolbar.title = "Report History"
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Report History"
+
 
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
 
         loadHistory()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun loadHistory() {
