@@ -42,8 +42,8 @@ class ItemEntryActivity : AppCompatActivity() {
 
         loadExistingItems() // Load data from the database
 
-        // Dynamically create 30 input fields side by side
-        for (i in 1..30) {
+        // Dynamically create 36 input fields side by side
+        for (i in 1..36) {
             val itemNameInput = TextView(this).apply {
                 hint = "Item Name $i"
                 textSize = 20f

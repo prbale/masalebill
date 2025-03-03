@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         if (itemList.isNotEmpty()) {
             items.addAll(itemList)
         } else {
-            for (i in 1..30) {
+            for (i in 1..36) {
                 items.add(BillItem("Item $i", 0.0, 0.0))
             }
         }
