@@ -165,15 +165,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateAndSavePDF(userName: String) {
+
+        val datetime = System.currentTimeMillis().toString()
         val pdfGenerator = PDFGenerator(this)
-        val pdfFile: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), "₹ "+paidAmountInput.text.toString(), remainingAmountText.text.toString(), userName)
+        val pdfFile: File? = pdfGenerator.generatePDF(items, totalAmountText.text.toString(), "₹ "+paidAmountInput.text.toString(), remainingAmountText.text.toString(), userName, datetime)
 
         pdfFile?.let {
             val dbHelper = DatabaseHelper(this)
             dbHelper.saveReport(
                 filename = pdfFile.name,
                 customer = userName,
-                amount = totalAmountText.text.toString()
+                amount = totalAmountText.text.toString(),
+                date = datetime
             )
             Toast.makeText(this, "PDF Generated Successfully", Toast.LENGTH_SHORT).show()
         }

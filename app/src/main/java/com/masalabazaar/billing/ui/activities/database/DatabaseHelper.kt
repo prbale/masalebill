@@ -75,13 +75,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return items
     }
 
-    fun saveReport(filename: String, customer: String, amount: String) {
+    fun saveReport(filename: String, customer: String, amount: String, date: String) {
         val db = writableDatabase
         val values = ContentValues().apply {
             put("filename", filename)
             put("customer", customer)
             put("amount", amount)
-            put("dateTime", getDate())
+            put("dateTime", date)
         }
         val result = db.insert("reports", null, values)
         if (result == -1L) {
@@ -90,15 +90,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             Log.d("DatabaseHelper", "Report saved successfully: $filename")
         }
         db.close()
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun getDate(): String {
-        val currentTimeMillis = System.currentTimeMillis()
-        val date = Date(currentTimeMillis)
-        val sdf = SimpleDateFormat("dd MMMM yyyy, h:mm a")
-        val formattedDate = sdf.format(date)
-        return formattedDate
     }
 
     fun getSavedReports(): List<ReportItem> {
@@ -125,14 +116,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return reports
     }
 
-    fun deleteReport(filename: String) {
+    fun deleteReport(item: ReportItem) {
         val db = writableDatabase
-        val result = db.delete("reports", "filename = ?", arrayOf(filename))
+
+        // Define the WHERE clause to match both filename and datetimestamp
+        val whereClause = "filename = ? AND dateTime = ?"
+        val whereArgs = arrayOf(item.fileName, item.dateTime)
+
+        // Perform the delete operation
+        val result = db.delete("reports", whereClause, whereArgs)
+
+        // Check if the deletion was successful
         if (result > 0) {
-            Log.d("DatabaseHelper", "Report deleted successfully: $filename")
+            Log.d("DatabaseHelper", "Report deleted successfully: ${item.fileName}, ${item.dateTime}")
         } else {
-            Log.e("DatabaseHelper", "Failed to delete report: $filename")
+            Log.e("DatabaseHelper", "Failed to delete report: ${item.fileName}, ${item.dateTime}")
         }
+
+        // Close the database connection
         db.close()
     }
 

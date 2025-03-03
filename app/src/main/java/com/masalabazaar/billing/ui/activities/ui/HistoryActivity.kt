@@ -63,16 +63,16 @@ class HistoryActivity : AppCompatActivity() {
         builder.setTitle("Choose Action")
         builder.setItems(options) { _, which ->
             when (which) {
-                0 -> viewPDF(reportItem.customerName.replace(" ", "_"))
-                1 -> printPDF(reportItem.customerName.replace(" ", "_"))
+                0 -> viewPDF(reportItem.customerName.replace(" ", "_"), reportItem.dateTime)
+                1 -> printPDF(reportItem.customerName.replace(" ", "_"), reportItem.dateTime)
                 2 -> showDeleteConfirmation(reportItem)
             }
         }
         builder.show()
     }
 
-    private fun viewPDF(customerName: String) {
-        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
+    private fun viewPDF(customerName: String, dateTime: String) {
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_${dateTime}_bill.pdf")
 
         if (pdfFile.exists()) {
             val uri = FileProvider.getUriForFile(this, "com.masalabazaar.billing.provider", pdfFile)
@@ -86,8 +86,8 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun printPDF(customerName: String) {
-        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
+    private fun printPDF(customerName: String, dateTime: String) {
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}__${dateTime}_bill.pdf")
         val printHelper = PrintHelper(this)
         printHelper.printPDF(pdfFile)
     }
@@ -103,7 +103,7 @@ class HistoryActivity : AppCompatActivity() {
 
     private fun deleteReport(reportItem: ReportItem) {
         val dbHelper = DatabaseHelper(this)
-        dbHelper.deleteReport(reportItem.fileName)
+        dbHelper.deleteReport(reportItem)
 
         val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${reportItem.fileName}")
         if (pdfFile.exists()) {

@@ -59,9 +59,7 @@ class PdfViewerActivity : AppCompatActivity() {
     }
 
     private fun printPDF(customerName: String) {
-        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_bill.pdf")
-        val printHelper = PrintHelper(this)
-        printHelper.printPDF(pdfFile)
+        // Pending
     }
 
     private fun displayPDF(pdfPath: String) {
