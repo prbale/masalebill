@@ -38,7 +38,48 @@
         android:background="#A4ACC3"
         android:textColor="@android:color/white"
         android:textColorHint="@color/background"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="10dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:text="Item Name"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/itemRate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Price / Kg"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/itemQuantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:hint="Qty"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black" />
 
     <!-- RecyclerView for Items -->
     <androidx.recyclerview.widget.RecyclerView
