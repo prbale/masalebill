@@ -119,6 +119,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = BillAdapter(items) { updateTotalAmount() }
         recyclerView.adapter = adapter
+        recyclerView.setHasFixedSize(true)
     }
 
     private fun setupButtonActions() {

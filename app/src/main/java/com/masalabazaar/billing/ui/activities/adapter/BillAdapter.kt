@@ -23,7 +23,7 @@ class BillAdapter(private val items: MutableList<BillItem>, private val updateTo
         holder.name.text = item.name
         holder.rate.text = "₹${item.ratePerKg}"    
         holder.quantity.setText(item.quantity.toString())
-
+        holder.setIsRecyclable(false)
         holder.quantity.addTextChangedListener {
             item.quantity = it.toString().toDoubleOrNull() ?: 0.0
             updateTotal()
