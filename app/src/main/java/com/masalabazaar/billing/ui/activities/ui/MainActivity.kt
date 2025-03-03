@@ -1,5 +1,6 @@
 package com.masalabazaar.billing.ui.activities.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_add_items -> {
-                startActivity(Intent(this, ItemEntryActivity::class.java))
+                callItemDetailsEntryScreen()
                 true
             }
             R.id.menu_clear -> {
@@ -141,9 +143,29 @@ class MainActivity : AppCompatActivity() {
 
         addItemButton.visibility = View.GONE
         addItemButton.setOnClickListener {
-            startActivity(Intent(this, ItemEntryActivity::class.java))
+            callItemDetailsEntryScreen()
         }
     }
+
+    // Step 1: Define the result launcher
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            handleResult(data)
+        }
+    }
+
+    // Step 2: Function to launch the child activity
+    private fun callItemDetailsEntryScreen() {
+        val intent = Intent(this, ItemEntryActivity::class.java)
+        resultLauncher.launch(intent)
+    }
+
+    // Step 3: Function to handle the result
+    private fun handleResult(data: Intent?) {
+        loadItems()
+    }
+
 
     private fun loadItems() {
         val dbHelper = DatabaseHelper(this)
