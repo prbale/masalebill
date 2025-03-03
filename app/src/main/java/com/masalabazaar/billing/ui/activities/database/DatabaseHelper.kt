@@ -1,7 +1,6 @@
 package com.masalabazaar.billing.ui.activities.database
 
 
-import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
@@ -9,8 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.masalabazaar.billing.ui.activities.data.BillItem
 import com.masalabazaar.billing.ui.activities.data.ReportItem
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
