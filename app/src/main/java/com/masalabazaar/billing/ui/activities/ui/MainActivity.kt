@@ -3,6 +3,7 @@ package com.masalabazaar.billing.ui.activities.ui
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -15,6 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.masalabazaar.billing.R
@@ -179,6 +181,23 @@ class MainActivity : AppCompatActivity() {
                 date = datetime
             )
             Toast.makeText(this, "PDF Generated Successfully", Toast.LENGTH_SHORT).show()
+        }
+
+        viewPDF(userName, datetime);
+    }
+
+    private fun viewPDF(customerName: String, dateTime: String) {
+        val pdfFile = File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "${customerName}_${dateTime}_bill.pdf")
+
+        if (pdfFile.exists()) {
+            val uri = FileProvider.getUriForFile(this, "com.masalabazaar.billing.provider", pdfFile)
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, "application/pdf")
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "PDF file not found!", Toast.LENGTH_SHORT).show()
         }
     }
 }
